@@ -1,26 +1,58 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<div class='d-flex justify-center flex-column'>
+  <div class='mx-auto mt-5'>
+  <h1 class="mb-5">{{ title }}</h1>
+  <AppointmentsList v-if="appointments" @remove="removeItem" @edit="editItem"  :appointments="appointments"/>
+  </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import axios from 'axios'
+import AppointmentsList from './components/AppointmentsList'
+import _ from 'lodash'
 export default {
-  name: 'App',
+  name: "App",
+  data: () => {
+    return {
+      title: "Appoiment List",
+      appointments: null,
+      aptIndex: 0
+    };
+  },
+  async mounted() {
+    let data = await (axios.get('https://gist.githubusercontent.com/planetoftheweb/46426d47f21f2c9245bbe23f0fb834b5/raw/afae0adf97472893288ac5cde69e7bbb770793ed/appointments.json')
+    .then(data => data.data)
+    .catch(err => err))
+    this.appointments = await (data).map(el => {
+        el.aptId = this.aptIndex
+        this.aptIndex++
+        return el
+      }
+      )
+      console.log(this.appointments)
+  },
   components: {
-    HelloWorld
-  }
-}
+    AppointmentsList
+  },
+  methods: {
+    removeItem: function(apt){
+      
+      this.appointments = _.without(this.appointments, apt)
+
+    },
+    editItem: function(id, fild, text){
+      const aptIndex = _.findIndex(this.appointments, {
+        aptId: id
+      })
+
+      this.appointments[aptIndex][fild] = text
+    }
+  },
+};
 </script>
 
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css";
 </style>
