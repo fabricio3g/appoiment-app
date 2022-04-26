@@ -2,6 +2,7 @@
 <div class='d-flex justify-center flex-column'>
   <div class='mx-auto mt-5'>
   <h1 class="mb-5">{{ title }}</h1>
+  <addAppointment @add="addItem"/>
   <AppointmentsList v-if="appointments" @remove="removeItem" @edit="editItem"  :appointments="appointments"/>
   </div>
   </div>
@@ -10,6 +11,8 @@
 <script>
 import axios from 'axios'
 import AppointmentsList from './components/AppointmentsList'
+import addAppointment from './components/addAppointment'
+
 import _ from 'lodash'
 export default {
   name: "App",
@@ -33,9 +36,17 @@ export default {
       console.log(this.appointments)
   },
   components: {
-    AppointmentsList
+    AppointmentsList,
+     addAppointment
+    
   },
   methods: {
+    addItem: function(apt){
+      apt.aptId = this.aptIndex;
+      this.aptIndex++
+      console.log(apt)
+      this.appointments.push(apt)
+    },
     removeItem: function(apt){
       
       this.appointments = _.without(this.appointments, apt)

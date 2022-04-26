@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button @click="hiddenpanel = !hiddenpanel" class="btn btn-primary w-100 text-start rounded mb-5"><i class="fa fa-add"></i> Add appointment</button>
+    <button @click="hiddenpanel = !hiddenpanel" class="btn bg-black text-white w-100 text-start rounded-top mb-5"><i class="fa fa-add"></i> Add appointment</button>
     <form @submit.prevent="requestAdd" class="mb-5" :class="{ 'd-none': hiddenpanel }">
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Pet's Name</label>
@@ -12,15 +12,15 @@
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Date</label>
-    <input  name="date" v-model="formData.date" type="date" class="form-control" >
+    <input  name="aptDate" v-model="formData.aptDate" type="date" class="form-control" >
   </div>
    <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Date</label>
-    <input name="time" v-model="formData.time"  type="time" class="form-control" >
+    <input name="aptTime" v-model="formData.aptTime"  type="time" class="form-control" >
   </div>
     <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Notes</label>
-    <input name="time" v-model="formData.aptNotes"  type="text" class="form-control" >
+    <input name="aptNotes" v-model="formData.aptNotes"  type="text" class="form-control" >
   </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>
@@ -39,13 +39,16 @@ export default{
     }
     ,
         methods: {
-            requestAdd: ()=>{
+            requestAdd: function()    {
                 this.formData = {
                     petName: this.formData.petName,
                     petOwner: this.formData.petOwner,
-                    aptDate: this.formDate.date + " " + this.formData.time,
-                    aptNotes: this.formDate.aptNotes
+                    aptDate: new String(this.formData.aptDate) + " " + this.formData.aptTime,
+                    aptNotes: this.formData.aptNotes
                 }
+                this.$emit('add', this.formData)
+                this.formData = []
+                this.hiddenpanel = true 
             }
         }
 }

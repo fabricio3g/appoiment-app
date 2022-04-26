@@ -1,5 +1,5 @@
 <template>
-    <addAppointment/>
+    
     <div class='card pt-3 px-3 my-2'  v-for="item in appointments" :key="item.aptId" >
     <div class='d-flex flex-row text-muted'>
       <small>{{formatedDate(item.aptDate)}}</small>
@@ -17,7 +17,6 @@
 </template>
 <script>
 import moment from 'moment'
-import addAppointment from './addAppointment'
 export default{
     name: "AppointmentsList",
     props: ["appointments"],
@@ -26,8 +25,6 @@ export default{
         return moment(new Date(date)).format("MM-DD-YY, h:mm a")
       }
     },
-    components: {
-      addAppointment
-    }
+   
 }
 </script>
