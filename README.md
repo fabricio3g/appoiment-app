@@ -1,4 +1,4 @@
-# Appoiment App
+#Appointment App
 
 Base on the Vue.js: Building an Interface from Linkedin Learning
 
@@ -22,7 +22,3 @@ npm run build
 ### Lints and fixes files
 ```
 npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
