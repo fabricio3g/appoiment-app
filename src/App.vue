@@ -2,8 +2,9 @@
 <div class='d-flex justify-center flex-column'>
   <div class='mx-auto mt-5'>
   <h1 class="mb-5">{{ title }}</h1>
+  <searchAppointment @searchRecords='searchItem' />
   <addAppointment @add="addItem"/>
-  <AppointmentsList v-if="appointments" @remove="removeItem" @edit="editItem"  :appointments="appointments"/>
+  <AppointmentsList v-if="appointments" @remove="removeItem" @edit="editItem"  :appointments="searchApts"/>
   </div>
   </div>
 </template>
@@ -12,6 +13,7 @@
 import axios from 'axios'
 import AppointmentsList from './components/AppointmentsList'
 import addAppointment from './components/addAppointment'
+import searchAppointment from './components/searchAppointment'
 
 import _ from 'lodash'
 export default {
@@ -20,7 +22,8 @@ export default {
     return {
       title: "Appoiment List",
       appointments: null,
-      aptIndex: 0
+      aptIndex: 0,
+      searchTermns: ""
     };
   },
   async mounted() {
@@ -33,14 +36,30 @@ export default {
         return el
       }
       )
-      console.log(this.appointments)
+
   },
   components: {
     AppointmentsList,
-     addAppointment
+     addAppointment,
+     searchAppointment
     
   },
+  computed: {
+    searchApts: function(){
+      return this.appointments.filter(item =>{
+        
+        return(
+          item.petName.toLowerCase().match(this.searchTermns.toLowerCase()) ||
+          item.aptNotes.toLowerCase().match(this.searchTermns.toLowerCase()) ||
+          item.petOwner.toLowerCase().match(this.searchTermns.toLowerCase()) 
+        )
+      })
+    }
+  },
   methods: {
+    searchItem: function(terms){
+      this.searchTermns = terms
+    },
     addItem: function(apt){
       apt.aptId = this.aptIndex;
       this.aptIndex++
